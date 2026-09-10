@@ -1,0 +1,394 @@
+{
+  "name": "frivenv",
+  "displayName": "Frivenv",
+  "description": "Keep a Python virtualenv per Frida version and push the matching frida-server to rooted Android and jailbroken iOS devices.",
+  "version": "0.0.1",
+  "publisher": "local",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xorren/frivenv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xorren/frivenv/issues"
+  },
+  "homepage": "https://github.com/xorren/frivenv#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "frivenv.refresh",
+        "title": "%cmd.refresh.title%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "frivenv.moveItemUp",
+        "title": "%cmd.moveItemUp.title%",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "frivenv.moveItemDown",
+        "title": "%cmd.moveItemDown.title%",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "frivenv.recheckEnv",
+        "title": "%cmd.recheckEnv.title%",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "frivenv.openTerminal",
+        "title": "%cmd.openTerminal.title%",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "frivenv.newProfile",
+        "title": "%cmd.newProfile.title%",
+        "icon": "$(add)"
+      },
+      {
+        "command": "frivenv.manageProfiles",
+        "title": "%cmd.manageProfiles.title%",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "frivenv.configureProfileTools",
+        "title": "%cmd.configureProfileTools.title%",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "frivenv.runScript",
+        "title": "%cmd.runScript.title%"
+      },
+      {
+        "command": "frivenv.checkConnection",
+        "title": "%cmd.checkConnection.title%",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "frivenv.refreshDevices",
+        "title": "%cmd.refreshDevices.title%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "frivenv.manageDevices",
+        "title": "%cmd.manageDevices.title%",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "frivenv.configureDeviceTools",
+        "title": "%cmd.configureDeviceTools.title%",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "frivenv.openDeviceShell",
+        "title": "%cmd.openDeviceShell.title%",
+        "icon": "$(vm-connect)"
+      },
+      {
+        "command": "frivenv.refreshIosDevices",
+        "title": "%cmd.refreshIosDevices.title%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "frivenv.manageIosDevices",
+        "title": "%cmd.manageIosDevices.title%",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "frivenv.openIosDeviceShell",
+        "title": "%cmd.openIosDeviceShell.title%",
+        "icon": "$(vm-connect)"
+      },
+      {
+        "command": "frivenv.openProfileTerminalForDevice",
+        "title": "%cmd.openProfileTerminalForDevice.title%",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "frivenv.showInExplorer",
+        "title": "%cmd.showInExplorer.title%"
+      },
+      {
+        "command": "frivenv.hideFromExplorer",
+        "title": "%cmd.hideFromExplorer.title%"
+      },
+      {
+        "command": "frivenv.openSettings",
+        "title": "%cmd.openSettings.title%",
+        "icon": "$(settings-gear)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "frivenv",
+          "title": "Frivenv",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "frivenv": [
+        {
+          "id": "frivenvProfiles",
+          "name": "%view.profiles.name%",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "frivenvDevices",
+          "name": "%view.devices.name%",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "frivenvIosDevices",
+          "name": "%view.iosDevices.name%",
+          "visibility": "collapsed"
+        }
+      ],
+      "explorer": [
+        {
+          "id": "frivenvExplorer",
+          "name": "%view.frivenv.name%",
+          "when": "config.frivenv.showInExplorer",
+          "visibility": "collapsed"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "frivenvProfiles",
+        "contents": "%welcome.pyMissing%",
+        "when": "frivenv:pyMissing"
+      },
+      {
+        "view": "frivenvProfiles",
+        "contents": "%welcome.noProfiles%",
+        "when": "!frivenv:pyMissing"
+      },
+      {
+        "view": "frivenvDevices",
+        "contents": "%welcome.adbMissing%",
+        "when": "frivenv:adbMissing"
+      },
+      {
+        "view": "frivenvDevices",
+        "contents": "%welcome.noDevices%",
+        "when": "!frivenv:adbMissing"
+      },
+      {
+        "view": "frivenvIosDevices",
+        "contents": "%welcome.noIosDevices%"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "frivenv.showInExplorer",
+          "when": "!config.frivenv.showInExplorer"
+        },
+        {
+          "command": "frivenv.hideFromExplorer",
+          "when": "config.frivenv.showInExplorer"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "frivenv.refresh",
+          "when": "view == frivenvProfiles",
+          "group": "navigation@1"
+        },
+        {
+          "command": "frivenv.manageProfiles",
+          "when": "view == frivenvProfiles",
+          "group": "navigation@2"
+        },
+        {
+          "command": "frivenv.refreshDevices",
+          "when": "view == frivenvDevices",
+          "group": "navigation@1"
+        },
+        {
+          "command": "frivenv.manageDevices",
+          "when": "view == frivenvDevices",
+          "group": "navigation@2"
+        },
+        {
+          "command": "frivenv.refreshIosDevices",
+          "when": "view == frivenvIosDevices",
+          "group": "navigation@1"
+        },
+        {
+          "command": "frivenv.manageIosDevices",
+          "when": "view == frivenvIosDevices",
+          "group": "navigation@2"
+        },
+        {
+          "command": "frivenv.openSettings",
+          "when": "view == frivenvProfiles || view == frivenvDevices || view == frivenvIosDevices || view == frivenvExplorer",
+          "group": "9_frivenv"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "frivenv.openTerminal",
+          "when": "(view == frivenvProfiles || view == frivenvExplorer) && viewItem == fridaProfile",
+          "group": "inline"
+        },
+        {
+          "command": "frivenv.moveItemUp",
+          "when": "(view == frivenvProfiles || view == frivenvDevices || view == frivenvIosDevices || view == frivenvExplorer) && (viewItem == fridaProfile || viewItem =~ /^frivenvDeviceConnectedRegistered/ || viewItem =~ /^frivenvDeviceDisconnected/ || viewItem =~ /^frivenvIosDevice/)",
+          "group": "2_order@1"
+        },
+        {
+          "command": "frivenv.moveItemDown",
+          "when": "(view == frivenvProfiles || view == frivenvDevices || view == frivenvIosDevices || view == frivenvExplorer) && (viewItem == fridaProfile || viewItem =~ /^frivenvDeviceConnectedRegistered/ || viewItem =~ /^frivenvDeviceDisconnected/ || viewItem =~ /^frivenvIosDevice/)",
+          "group": "2_order@2"
+        },
+        {
+          "command": "frivenv.openDeviceShell",
+          "when": "(view == frivenvDevices || view == frivenvExplorer) && viewItem =~ /^frivenvDeviceConnectedRegistered/",
+          "group": "inline@1"
+        },
+        {
+          "command": "frivenv.openProfileTerminalForDevice",
+          "when": "(view == frivenvDevices || view == frivenvExplorer) && viewItem =~ /^frivenvDevice.*Linked$/",
+          "group": "inline@2"
+        },
+        {
+          "command": "frivenv.openIosDeviceShell",
+          "when": "(view == frivenvIosDevices || view == frivenvExplorer) && viewItem =~ /^frivenvIosDevice/",
+          "group": "inline@1"
+        },
+        {
+          "command": "frivenv.openProfileTerminalForDevice",
+          "when": "(view == frivenvIosDevices || view == frivenvExplorer) && viewItem == frivenvIosDeviceLinked",
+          "group": "inline@2"
+        },
+        {
+          "command": "frivenv.refresh",
+          "when": "view == frivenvExplorer && viewItem == frivenvCat.profiles",
+          "group": "inline@1"
+        },
+        {
+          "command": "frivenv.manageProfiles",
+          "when": "view == frivenvExplorer && viewItem == frivenvCat.profiles",
+          "group": "inline@2"
+        },
+        {
+          "command": "frivenv.refreshDevices",
+          "when": "view == frivenvExplorer && viewItem == frivenvCat.devices",
+          "group": "inline@1"
+        },
+        {
+          "command": "frivenv.manageDevices",
+          "when": "view == frivenvExplorer && viewItem == frivenvCat.devices",
+          "group": "inline@2"
+        },
+        {
+          "command": "frivenv.refreshIosDevices",
+          "when": "view == frivenvExplorer && viewItem == frivenvCat.ios",
+          "group": "inline@1"
+        },
+        {
+          "command": "frivenv.manageIosDevices",
+          "when": "view == frivenvExplorer && viewItem == frivenvCat.ios",
+          "group": "inline@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "frivenv.runScript",
+          "when": "resourceExtname == .js",
+          "group": "7_frida"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "frivenv.runScript",
+          "when": "resourceExtname == .js",
+          "group": "7_frida"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Frivenv",
+      "properties": {
+        "frivenv.language": {
+          "type": "string",
+          "order": 1,
+          "enum": ["auto", "ko", "en"],
+          "enumDescriptions": [
+            "%config.language.auto%",
+            "%config.language.ko%",
+            "%config.language.en%"
+          ],
+          "default": "auto",
+          "description": "%config.language.description%"
+        },
+        "frivenv.showInExplorer": {
+          "type": "boolean",
+          "order": 2,
+          "default": true,
+          "description": "%config.showInExplorer.description%"
+        },
+        "frivenv.pythonLauncherPath": {
+          "type": "string",
+          "order": 3,
+          "default": "",
+          "description": "%config.pythonLauncherPath.description%"
+        },
+        "frivenv.adbPath": {
+          "type": "string",
+          "order": 4,
+          "default": "",
+          "description": "%config.adbPath.description%"
+        },
+        "frivenv.dataDir": {
+          "type": "string",
+          "order": 5,
+          "default": "",
+          "description": "%config.dataDir.description%"
+        },
+        "frivenv.scriptsDir": {
+          "type": "string",
+          "order": 6,
+          "default": "",
+          "markdownDescription": "%config.scriptsDir.description%"
+        },
+        "frivenv.iosFridaServerDir": {
+          "type": "string",
+          "order": 7,
+          "default": "",
+          "markdownDescription": "%config.iosFridaServerDir.description%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "node esbuild.js --production",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "check": "tsc -p ./ && node scripts/check-panels.js",
+    "package": "node esbuild.js --production && vsce package -o frivenv.vsix"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/ssh2": "^1.15.6",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "ssh2": "^1.17.0",
+    "xz-decompress": "^0.2.3"
+  }
+}

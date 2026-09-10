@@ -1,0 +1,18 @@
+# .vsix에 넣지 않을 것 (dist/extension.js 하나로 번들되므로 소스/의존성 전부 제외)
+.vscode/**
+.vscode-test/**
+out/**
+src/**
+node_modules/**
+scripts/**
+**/*.ts
+**/*.map
+esbuild.js
+tsconfig.json
+.gitignore
+.eslintrc*
+.impeccable/**
+CONTEXT.md
+PRODUCT.md
+**/*.jsonl
+CLAUDE.md
